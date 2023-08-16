@@ -5583,6 +5583,16 @@ static void KeyCallback(GLFWwindow *window, int key, int scancode, int action, i
 {
     if (key < 0) return;    // Security check, macOS fn key generates -1
 
+    // Check if there is space available in the key queue
+    if (CORE.Input.Keyboard.keyPressedQueueCount < MAX_KEY_PRESSED_QUEUE &&
+        (action == GLFW_PRESS || action == GLFW_REPEAT) &&
+        !IsKeyPressed(key))
+    {
+        // Add character to the queue
+        CORE.Input.Keyboard.keyPressedQueue[CORE.Input.Keyboard.keyPressedQueueCount] = key;
+        CORE.Input.Keyboard.keyPressedQueueCount++;
+    }
+
     // WARNING: GLFW could return GLFW_REPEAT, we need to consider it as 1
     // to work properly with our implementation (IsKeyDown/IsKeyUp checks)
     if (action == GLFW_RELEASE) CORE.Input.Keyboard.currentKeyState[key] = 0;
