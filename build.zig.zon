@@ -1,0 +1,4 @@
+.{
+    .name = "raylib",
+    .version = "4.6.0",
+}
